@@ -263,7 +263,7 @@ def show_dashboard():
         with col4:
             st.metric("Unique Loan Accounts",f"{Unique_Loan_Accounts:,}")
 
-         with col5:
+        with col5:
             st.metric("Top_Loan_Type",Top_1_loan_type)
 
         with col6:
@@ -743,6 +743,7 @@ if st.session_state.logged_in:
     
         
         
+
 
 
 
