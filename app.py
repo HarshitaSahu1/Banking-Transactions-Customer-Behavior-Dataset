@@ -391,7 +391,7 @@ def show_dashboard():
         with col2:     
             st.metric("Average Client Age",f"{Avg_Client_Age:,}")
 
-        with col3[0]:
+        with col3:
             st.metric("Average Transactions per Customer",f"{Average_Transactions_per_Customer:.2f}")
 
         with col4:
@@ -743,6 +743,7 @@ if st.session_state.logged_in:
     
         
         
+
 
 
 
