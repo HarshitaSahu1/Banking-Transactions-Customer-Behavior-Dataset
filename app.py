@@ -79,10 +79,21 @@ def show_dashboard():
         Unique_Accounts = selected_options['account_id'].nunique()
 
         Types_Transactions_operations = selected_options['operation'].nunique()
+
+        most_trans_type =  selected_options.groupby('type')['trans_id'].count().sort_values(ascending = False).head(1).reset_index(name = 'Max_Amt')
+        most_trans_type = most_trans_type['type'][0]
+
+        most_trans_operation= selected_options.groupby('operation')['trans_id'].count().sort_values(ascending = False).head(1).reset_index(name = 'Max_Amt')
+        most_trans_operation = most_trans_operation['operation'][0]
+
+        Max_Amount_Transaction = selected_options['amount'].max()
+
         
 
         col1,col2 = st.columns(2)
         col3,col4 = st.columns(2)
+        col5,col6 = st.columns(2)
+        col7,= st.columns(1)
 
         with col1 :
             st.metric("Total Transactions", f"{Total_Transactions:,}")
@@ -95,6 +106,17 @@ def show_dashboard():
 
         with col4:
             st.metric("Types of Transaction Operations",f"{Types_Transactions_operations:,}")
+
+        with col5:
+            st.metric("Most Frequent Transaction Type", most_trans_type)
+        
+        with col6:
+            st.metric("Most Frequent Transaction Operations",most_trans_operation)
+
+        with col7:
+            st.metric("Most Amount Transaction Operations", f"{Max_Amount_Transaction:,}")
+
+    
 
         st.markdown(" ")
 
@@ -218,8 +240,16 @@ def show_dashboard():
         total_cust = client['client_id'].count()
         clients_loan_taken_pct = loan_taken/total_cust
         Unique_Loan_Accounts = selected_options['account_id'].nunique()
+
+        Top_1_loan_type = selected_options.groupby('duration_type')['loan_id'].count().sort_values(ascending = False).head(1).reset_index(name = 'Max_count')
+        Top_1_loan_type = Top_1_loan_type['duration_type'][0]
+
+        Top_1_loan_status =  selected_options.groupby('status')['loan_id'].count().sort_values(ascending = False).head(1).reset_index(name = 'Max_count')
+        Top_1_loan_status =Top_1_loan_status['status'][0]
+        
         col1,col2 = st.columns(2)
         col3,col4 = st.columns(2)
+        col5,col6 = st.columns(2)
 
         with col1:
             st.metric("Total_Loans",f"{Total_Loan:,}")
@@ -232,6 +262,12 @@ def show_dashboard():
 
         with col4:
             st.metric("Unique Loan Accounts",f"{Unique_Loan_Accounts:,}")
+
+         with col5:
+            st.metric("Top_Loan_Type",Top_1_loan_type)
+
+        with col6:
+            st.metric("Top_Loan_Status",Top_1_loan_status)
 
         st.markdown(" ")
 
@@ -336,9 +372,18 @@ def show_dashboard():
         .merge(account,how = 'left',left_on = 'account_id',right_on = 'account_id')
         .merge(trans , how = 'left' , left_on = 'account_id',right_on = 'account_id'))
         Average_Transactions_per_Customer = trans_cust['trans_id'].nunique()/trans_cust['client_id'].nunique()
+        Top_Age_grp = selected_options.groupby('Age_grps')['client_id'].count().sort_values(ascending = False).reset_index(name = 'Clients_Count').head(1)
+        Top_Age_grp = Top_Age_grp['Age_grps'][0]
+        Top_Operation_Type =  (selected_options.merge(disp,how = 'left' , left_on = 'client_id',right_on = 'client_id')
+        .merge(account,how = 'left',left_on = 'account_id',right_on = 'account_id')
+        .merge(trans , how = 'left' , left_on = 'account_id',right_on = 'account_id'))
+        Top_Operation_Type = Top_Operation_Type.groupby('operation')['client_id'].count().sort_values(ascending = False).reset_index(name = 'operation_types').head(1)['operation'][0]
+        Top_client_location = selected_options.merge(district,how = 'left' , left_on = 'district_id',right_on = 'District_Ids')
+        Top_client_location = Top_client_location.groupby('Region')['client_id'].count().sort_values(ascending = False).reset_index(name = 'Region_counts').head(1)['Region'][0]
 
         col1,col2 = st.columns(2)
-        col3 = st.columns(1)
+        col3,col4 = st.columns(2)
+        col5,col6 = st.columns(2)
 
         with col1:
             st.metric("Total Customers",f"{Total_Customers:,}")
@@ -348,6 +393,16 @@ def show_dashboard():
 
         with col3[0]:
             st.metric("Average Transactions per Customer",f"{Average_Transactions_per_Customer:.2f}")
+
+        with col4:
+            st.metric("Top_Age_grp",Top_Age_grp)
+
+        with col5:
+            st.metric("Top_Operation_Type",Top_Operation_Type)
+
+        with col6:
+            st.metric("Top_client_location",Top_client_location)
+        
 
         st.markdown(" ")
 
@@ -688,6 +743,7 @@ if st.session_state.logged_in:
     
         
         
+
 
 
 
