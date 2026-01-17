@@ -69,9 +69,9 @@ Regional and demographic insights
 
 🔗 Project Links
 
-Power BI Dashboard: 
+[Power BI Dashboard](power_bi_dashbord_link.txt)
 
-Streamlit App: (Paste Link Here)
+[Streamlit App] (Paste Link Here)
 
 🚀 Business Impact
 
